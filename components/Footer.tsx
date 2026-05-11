@@ -7,7 +7,7 @@ export function Footer() {
         <div className="footer-grid">
           <div className="footer-brand">
             <Link href="/" className="logo">ROBBERS MEWEN</Link>
-            <p className="footer-tagline">Luxury lifestyle brand crafting modern identities with bold elegance.</p>
+            <p className="footer-tagline">Premium perfumes & handcrafted leather goods with bold elegance.</p>
           </div>
 
           <div className="footer-col">
@@ -28,10 +28,10 @@ export function Footer() {
 
           <div className="footer-col">
             <h4>Help</h4>
+            <Link href="/track-order">Track Order</Link>
+            <Link href="/contact">Contact Us</Link>
             <Link href="/cart">Cart</Link>
-            <Link href="/wishlist">Wishlist</Link>
             <Link href="/search">Search</Link>
-            <Link href="/checkout">Checkout</Link>
           </div>
         </div>
 

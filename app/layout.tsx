@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "@/components/ui/Toast";
 import "./globals.css";
 
@@ -16,9 +17,29 @@ const bodyFont = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Robbers Mewen — Luxury Lifestyle Brand",
-  description:
-    "Shop premium perfumes, clothes, footwear, and leather goods. Crafted with bold elegance for those who demand more."
+  title: {
+    default: "Robbers Mewen — Premium Perfumes & Leather Goods",
+    template: "%s | Robbers Mewen",
+  },
+  description: "Shop luxury perfumes and handcrafted leather goods. Arabic perfumes, French fragrances, wallets, belts, and more. Crafted with bold elegance.",
+  keywords: ["perfume", "leather goods", "luxury brand", "arabic perfume", "french perfume", "wallets", "belts", "ittar", "body spray", "Robbers Mewen"],
+  authors: [{ name: "Robbers Mewen" }],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Robbers Mewen",
+    title: "Robbers Mewen — Premium Perfumes & Leather Goods",
+    description: "Shop luxury perfumes and handcrafted leather goods. Crafted with bold elegance for those who demand more.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Robbers Mewen — Premium Perfumes & Leather Goods",
+    description: "Shop luxury perfumes and handcrafted leather goods. Crafted with bold elegance.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -28,9 +49,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#060d14" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body className={`${headingFont.variable} ${bodyFont.variable}`}>
         {children}
         <ToastContainer />
+        <Analytics />
       </body>
     </html>
   );
