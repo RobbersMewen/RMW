@@ -1,34 +1,33 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ImageCarousel } from "@/components/ui/ImageCarousel";
 import { AddToCartWithQty } from "@/components/ui/AddToCartWithQty";
 import { WishlistButton } from "@/components/ui/WishlistButton";
-
-export type Product = {
-  name: string;
-  description: string;
-  price: number;
-  images: string[];
-};
+import { getProductsBySubcategory, ProductData } from "@/store/products";
 
 type Props = {
-  title: string;
-  description: string;
-  products: Product[];
+  subcategory: string;
   category: string;
 };
 
-export function CollectionCategoryDetail({ products, category }: Props) {
+export function CollectionCategoryDetail({ subcategory, category }: Props) {
+  const [products, setProducts] = useState<ProductData[]>([]);
+
+  useEffect(() => {
+    getProductsBySubcategory(subcategory).then(setProducts);
+  }, [subcategory]);
+
   return (
     <section className="section">
       <div className="container">
         <div className="product-grid">
           {products.map((item) => (
-            <article key={item.name} className="product-card glass-card">
+            <article key={item.id} className="product-card glass-card">
               <div className="product-img-wrap">
                 <ImageCarousel images={item.images} alt={item.name} />
                 <WishlistButton
-                  id={`${category}-${item.name}`}
+                  id={item.id}
                   name={item.name}
                   price={item.price}
                   image={item.images[0]}
@@ -40,7 +39,7 @@ export function CollectionCategoryDetail({ products, category }: Props) {
                 <p>{item.description}</p>
                 <span className="product-price">${item.price}</span>
                 <AddToCartWithQty
-                  id={`${category}-${item.name}`}
+                  id={item.id}
                   name={item.name}
                   price={item.price}
                   image={item.images[0]}

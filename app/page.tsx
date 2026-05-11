@@ -2,17 +2,26 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { PageShell } from "@/components/PageShell";
 import { AddToCartButton } from "@/components/ui/AddToCartButton";
-
-const featured = [
-  { id: "perfume-crown-of-amber", name: "Crown of Amber", price: 189, category: "Perfume", href: "/collection/arabic-perfume", image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=480&fit=crop&q=75" },
-  { id: "leather-bifold-wallet", name: "Bifold Classic Wallet", price: 75, category: "Leather", href: "/leather/wallets", image: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400&h=480&fit=crop&q=75" },
-  { id: "perfume-velvet-saffron", name: "Velvet Saffron Oud", price: 275, category: "Perfume", href: "/collection/arabic-perfume", image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=480&fit=crop&q=75" },
-  { id: "leather-formal-belt", name: "Classic Formal Belt", price: 65, category: "Leather", href: "/leather/belts", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=480&fit=crop&q=75" },
-];
+import { getAllProducts, ProductData } from "@/store/products";
 
 export default function Home() {
+  const [featured, setFeatured] = useState<ProductData[]>([]);
+
+  useEffect(() => {
+    getAllProducts().then((products) => {
+      const picks = [
+        products.find((p) => p.id === "perfume-crown-of-amber"),
+        products.find((p) => p.id === "leather-bifold-classic"),
+        products.find((p) => p.id === "perfume-noir-petale"),
+        products.find((p) => p.id === "leather-classic-formal"),
+      ].filter(Boolean) as ProductData[];
+      setFeatured(picks);
+    });
+  }, []);
+
   return (
     <PageShell>
       <section className="brand-home section">
@@ -45,10 +54,10 @@ export default function Home() {
           <div className="featured-grid">
             {featured.map((item) => (
               <div key={item.id} className="featured-card glass-card">
-                <Link href={item.href}>
+                <Link href={item.category === "Perfume" ? "/collection" : "/leather"}>
                   <div className="featured-img-wrap">
                     <Image
-                      src={item.image}
+                      src={item.images[0]}
                       alt={item.name}
                       width={400}
                       height={480}
@@ -70,7 +79,7 @@ export default function Home() {
                     id={item.id}
                     name={item.name}
                     price={item.price}
-                    image={item.image}
+                    image={item.images[0]}
                     category={item.category}
                   />
                 </div>

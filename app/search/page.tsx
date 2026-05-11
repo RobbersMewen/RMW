@@ -1,20 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageShell } from "@/components/PageShell";
 import { ImageCarousel } from "@/components/ui/ImageCarousel";
 import { AddToCartButton } from "@/components/ui/AddToCartButton";
 import { WishlistButton } from "@/components/ui/WishlistButton";
-import { allProducts } from "@/store/products";
+import { getAllProducts, ProductData } from "@/store/products";
 
 type SortOption = "default" | "price-low" | "price-high" | "name";
 
 export default function SearchPage() {
+  const [products, setProducts] = useState<ProductData[]>([]);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState<SortOption>("default");
 
-  let filtered = allProducts.filter((p) => {
+  useEffect(() => {
+    getAllProducts().then(setProducts);
+  }, []);
+
+  let filtered = products.filter((p) => {
     const matchesQuery = query === "" ||
       p.name.toLowerCase().includes(query.toLowerCase()) ||
       p.description.toLowerCase().includes(query.toLowerCase());
@@ -35,7 +40,7 @@ export default function SearchPage() {
           <div className="search-bar">
             <input
               type="text"
-              placeholder="Search perfumes, clothes, footwear..."
+              placeholder="Search perfumes, leather goods..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               className="search-input"
@@ -48,8 +53,6 @@ export default function SearchPage() {
             >
               <option value="all">All Categories</option>
               <option value="Perfume">Perfume</option>
-              <option value="Clothes">Clothes</option>
-              <option value="Footwear">Footwear</option>
               <option value="Leather">Leather</option>
             </select>
             <select

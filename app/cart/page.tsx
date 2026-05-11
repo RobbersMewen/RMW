@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useCartStore, getCartTotal, getCartCount } from "@/store/cart";
 import { useToastStore } from "@/components/ui/Toast";
 import { PageShell } from "@/components/PageShell";
-import { allProducts } from "@/store/products";
-import { useEffect } from "react";
+import { getAllProducts, ProductData } from "@/store/products";
+import { useEffect, useState } from "react";
 
 export default function CartPage() {
   const items = useCartStore((s) => s.items);
@@ -16,17 +16,21 @@ export default function CartPage() {
   const addItem = useCartStore((s) => s.addItem);
   const loadCart = useCartStore((s) => s.loadCart);
   const addToast = useToastStore((s) => s.addToast);
+  const [related, setRelated] = useState<ProductData[]>([]);
 
   useEffect(() => { loadCart(); }, [loadCart]);
+
+  useEffect(() => {
+    const cartIds = new Set(items.map((i) => i.id));
+    getAllProducts().then((products) => {
+      setRelated(products.filter((p) => !cartIds.has(p.id)).slice(0, 4));
+    });
+  }, [items]);
 
   const subtotal = getCartTotal(items);
   const itemCount = getCartCount(items);
   const shipping = subtotal >= 100 ? 0 : 12;
   const total = items.length > 0 ? subtotal + shipping : 0;
-
-  // Related products: exclude items already in cart
-  const cartIds = new Set(items.map((i) => i.id));
-  const related = allProducts.filter((p) => !cartIds.has(p.id)).slice(0, 4);
 
   return (
     <PageShell>
@@ -117,7 +121,6 @@ export default function CartPage() {
             </div>
           )}
 
-          {/* You May Also Like */}
           {related.length > 0 && (
             <div className="related-section">
               <div className="section-head">
