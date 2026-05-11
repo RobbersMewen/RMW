@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "@/components/ui/Toast";
+import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import "./globals.css";
 
 const headingFont = Bodoni_Moda({
@@ -56,6 +57,7 @@ export default function RootLayout({
       <body className={`${headingFont.variable} ${bodyFont.variable}`}>
         {children}
         <ToastContainer />
+        <WhatsAppButton />
         <Analytics />
       </body>
     </html>
