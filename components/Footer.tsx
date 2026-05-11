@@ -11,19 +11,19 @@ export function Footer() {
           </div>
 
           <div className="footer-col">
-            <h4>Shop</h4>
-            <Link href="/collection">Perfume</Link>
-            <Link href="/clothes">Clothes</Link>
-            <Link href="/footwear">Footwear</Link>
-            <Link href="/leather">Leather</Link>
+            <h4>Perfume</h4>
+            <Link href="/collection/french-perfume">French Perfume</Link>
+            <Link href="/collection/arabic-perfume">Arabic Perfume</Link>
+            <Link href="/collection/ittar">Ittar</Link>
+            <Link href="/collection/body-spray">Body Spray</Link>
           </div>
 
           <div className="footer-col">
-            <h4>Categories</h4>
-            <Link href="/collection/french-perfume">French Perfume</Link>
-            <Link href="/collection/arabic-perfume">Arabic Perfume</Link>
-            <Link href="/clothes/stitched">Stitched</Link>
-            <Link href="/clothes/unstitched">Unstitched</Link>
+            <h4>Leather</h4>
+            <Link href="/leather/wallets">Wallets</Link>
+            <Link href="/leather/belts">Belts</Link>
+            <Link href="/leather/bands">Bands</Link>
+            <Link href="/leather/keychains">Keychains</Link>
           </div>
 
           <div className="footer-col">
