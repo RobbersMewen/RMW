@@ -5,10 +5,6 @@ import { PageShell } from "@/components/PageShell";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 
-function generateOrderId() {
-  return "RM-" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase();
-}
-
 const PROMO_CODES: Record<string, number> = {
   "WELCOME10": 10,
   "ROBBERS20": 20,
@@ -20,7 +16,9 @@ export default function CheckoutPage() {
   const clearCart = useCartStore((s) => s.clearCart);
   const loadCart = useCartStore((s) => s.loadCart);
   const [placed, setPlaced] = useState(false);
-  const [orderId, setOrderId] = useState("");
+  const [orderNumber, setOrderNumber] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [promoError, setPromoError] = useState("");
@@ -48,12 +46,53 @@ export default function CheckoutPage() {
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const id = generateOrderId();
-    setOrderId(id);
-    setPlaced(true);
-    clearCart();
+    setLoading(true);
+    setError("");
+
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    const orderData = {
+      customer_name: `${formData.get("firstName")} ${formData.get("lastName")}`,
+      customer_email: formData.get("email"),
+      customer_phone: formData.get("phone"),
+      address: formData.get("address"),
+      city: formData.get("city"),
+      payment_method: formData.get("payment_method"),
+      items: items.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image,
+      })),
+    };
+
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Something went wrong");
+        setLoading(false);
+        return;
+      }
+
+      setOrderNumber(data.order.order_number);
+      setPlaced(true);
+      clearCart();
+    } catch {
+      setError("Failed to place order. Please try again.");
+    }
+
+    setLoading(false);
   };
 
   if (placed) {
@@ -64,8 +103,8 @@ export default function CheckoutPage() {
             <div className="order-success glass-card">
               <div className="success-icon">✓</div>
               <h1>Order Placed!</h1>
-              <p className="order-id">Order ID: <strong>{orderId}</strong></p>
-              <p>Thank you for shopping with Robbers Mewen. Your order is being processed and you'll receive a confirmation email shortly.</p>
+              <p className="order-id">Order #: <strong>{orderNumber}</strong></p>
+              <p>Thank you for shopping with Robbers Mewen. Your order is being processed and you'll receive a confirmation shortly.</p>
               <Link href="/" className="primary-button">
                 Back to Home
               </Link>
@@ -104,70 +143,56 @@ export default function CheckoutPage() {
               <div className="form-row">
                 <div className="form-field">
                   <label htmlFor="firstName">First Name</label>
-                  <input id="firstName" type="text" required placeholder="John" />
+                  <input id="firstName" name="firstName" type="text" required placeholder="John" />
                 </div>
                 <div className="form-field">
                   <label htmlFor="lastName">Last Name</label>
-                  <input id="lastName" type="text" required placeholder="Doe" />
+                  <input id="lastName" name="lastName" type="text" required placeholder="Doe" />
                 </div>
               </div>
 
               <div className="form-field">
                 <label htmlFor="email">Email</label>
-                <input id="email" type="email" required placeholder="john@example.com" />
+                <input id="email" name="email" type="email" required placeholder="john@example.com" />
               </div>
 
               <div className="form-field">
                 <label htmlFor="phone">Phone</label>
-                <input id="phone" type="tel" required placeholder="+92 300 1234567" />
+                <input id="phone" name="phone" type="tel" required placeholder="+92 300 1234567" />
               </div>
 
               <div className="form-field">
                 <label htmlFor="address">Address</label>
-                <input id="address" type="text" required placeholder="123 Main Street" />
+                <input id="address" name="address" type="text" required placeholder="123 Main Street" />
               </div>
 
               <div className="form-row">
                 <div className="form-field">
                   <label htmlFor="city">City</label>
-                  <input id="city" type="text" required placeholder="Lahore" />
+                  <input id="city" name="city" type="text" required placeholder="Lahore" />
                 </div>
                 <div className="form-field">
                   <label htmlFor="zip">ZIP Code</label>
-                  <input id="zip" type="text" required placeholder="54000" />
+                  <input id="zip" name="zip" type="text" required placeholder="54000" />
                 </div>
               </div>
 
+              <h2 className="payment-heading">Payment Method</h2>
               <div className="form-field">
-                <label htmlFor="country">Country</label>
-                <select id="country" required defaultValue="">
-                  <option value="" disabled>Select country</option>
-                  <option value="PK">Pakistan</option>
-                  <option value="AE">UAE</option>
-                  <option value="SA">Saudi Arabia</option>
-                  <option value="US">United States</option>
-                  <option value="UK">United Kingdom</option>
-                </select>
+                <label>
+                  <input type="radio" name="payment_method" value="cod" defaultChecked /> Cash on Delivery (COD)
+                </label>
               </div>
-
-              <h2 className="payment-heading">Payment</h2>
               <div className="form-field">
-                <label htmlFor="card">Card Number</label>
-                <input id="card" type="text" placeholder="4242 4242 4242 4242" required maxLength={19} />
-              </div>
-              <div className="form-row">
-                <div className="form-field">
-                  <label htmlFor="expiry">Expiry</label>
-                  <input id="expiry" type="text" placeholder="MM/YY" required maxLength={5} />
-                </div>
-                <div className="form-field">
-                  <label htmlFor="cvv">CVV</label>
-                  <input id="cvv" type="text" placeholder="•••" required maxLength={4} />
-                </div>
+                <label>
+                  <input type="radio" name="payment_method" value="bank_transfer" /> Bank Transfer
+                </label>
               </div>
 
-              <button type="submit" className="primary-button place-order-btn">
-                Place Order — ${total.toFixed(2)}
+              {error && <p className="promo-error">{error}</p>}
+
+              <button type="submit" className="primary-button place-order-btn" disabled={loading}>
+                {loading ? "Placing Order..." : `Place Order — $${total.toFixed(2)}`}
               </button>
             </div>
 
