@@ -77,6 +77,24 @@ p { color: #c8dff0; line-height: 1.7; }
   letter-spacing: 0.18em;
   font-size: 1.1rem;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-text {
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+}
+
+.nav-logo {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.footer-logo {
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .menu-button { display: none; }
@@ -230,9 +248,9 @@ p { color: #c8dff0; line-height: 1.7; }
 .brand-home-shell { text-align: center; padding: 2.2rem 1rem; }
 
 .brand-wordmark {
-  font-size: clamp(3.3rem, 14vw, 10rem);
+  font-size: clamp(2.8rem, 10vw, 7rem);
   line-height: 0.9;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   margin-bottom: 1.1rem;
   text-transform: uppercase;
   color: #f6f2ff;
@@ -1323,6 +1341,44 @@ p { color: #c8dff0; line-height: 1.7; }
 
 .carousel-dot.active {
   background: #4fc3f7;
+}
+
+/* ===== SKELETON LOADING ===== */
+
+.skeleton-card {
+  overflow: hidden;
+}
+
+.skeleton-img {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-body {
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* ===== WHATSAPP BUTTON ===== */

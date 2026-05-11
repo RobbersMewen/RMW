@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   return (
@@ -6,7 +7,9 @@ export function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <Link href="/" className="logo">ROBBERS MEWEN</Link>
+            <Link href="/" className="logo">
+              <Image src="/logo.jpg" alt="Robbers Mewen" width={36} height={36} className="footer-logo" />
+            </Link>
             <p className="footer-tagline">Premium perfumes & handcrafted leather goods with bold elegance.</p>
           </div>
 

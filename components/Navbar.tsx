@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { CartIcon } from "@/components/ui/CartIcon";
 
@@ -34,7 +35,8 @@ export function Navbar() {
     <header className="nav-shell">
       <nav className="container nav">
         <Link href="/" className="logo" aria-label="Robbers Mewen home">
-          ROBBERS MEWEN
+          <Image src="/logo.jpg" alt="Robbers Mewen" width={40} height={40} className="nav-logo" priority />
+          <span className="logo-text">ROBBERS MEWEN</span>
         </Link>
 
         <button

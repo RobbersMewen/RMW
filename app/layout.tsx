@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Plus_Jakarta_Sans } from "next/font/google";
+import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "@/components/ui/Toast";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import "./globals.css";
 
-const headingFont = Bodoni_Moda({
+const headingFont = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-heading",
   weight: ["500", "600", "700"]
@@ -31,6 +31,7 @@ export const metadata: Metadata = {
     siteName: "Robbers Mewen",
     title: "Robbers Mewen — Premium Perfumes & Leather Goods",
     description: "Shop luxury perfumes and handcrafted leather goods. Crafted with bold elegance for those who demand more.",
+    images: [{ url: "/og-image.jpg", width: 1080, height: 1080, alt: "Robbers Mewen" }],
   },
   twitter: {
     card: "summary_large_image",
