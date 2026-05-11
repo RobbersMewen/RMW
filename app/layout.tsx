@@ -18,6 +18,7 @@ const bodyFont = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://robbers-mewen.vercel.app"),
   title: {
     default: "Robbers Mewen — Premium Perfumes & Leather Goods",
     template: "%s | Robbers Mewen",

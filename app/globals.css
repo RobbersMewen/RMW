@@ -250,11 +250,13 @@ p { color: #c8dff0; line-height: 1.7; }
 .brand-wordmark {
   font-size: clamp(2.8rem, 10vw, 7rem);
   line-height: 0.9;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   margin-bottom: 1.1rem;
   text-transform: uppercase;
   color: #f6f2ff;
   text-wrap: balance;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 700;
 }
 
 .brand-wordmark span {
