@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import { Playfair_Display, Plus_Jakarta_Sans, Cormorant_Garamond } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "@/components/ui/Toast";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
@@ -15,6 +15,12 @@ const bodyFont = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-body",
   weight: ["400", "500", "600"]
+});
+
+const displayFont = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["300", "400", "600"]
 });
 
 export const metadata: Metadata = {
@@ -56,7 +62,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#060d14" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={`${headingFont.variable} ${bodyFont.variable}`}>
+      <body className={`${headingFont.variable} ${bodyFont.variable} ${displayFont.variable}`}>
         {children}
         <ToastContainer />
         <WhatsAppButton />
