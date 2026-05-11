@@ -58,48 +58,6 @@ export const allProducts: ProductData[] = [
       "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?w=380&h=420&fit=crop&q=75"
     ]
   },
-  // Clothes
-  {
-    id: "Stitched-Classic Kurta", name: "Classic Kurta", description: "Premium cotton with minimal embroidery", price: 85, category: "Clothes", subcategory: "Stitched",
-    images: [
-      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=380&h=420&fit=crop&q=75"
-    ]
-  },
-  {
-    id: "Unstitched-Lawn Collection", name: "Lawn Collection", description: "Lightweight printed lawn for summer", price: 45, category: "Clothes", subcategory: "Unstitched",
-    images: [
-      "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1584670747417-594a9412fba5?w=380&h=420&fit=crop&q=75"
-    ]
-  },
-  {
-    id: "Stitched-Formal Shalwar Suit", name: "Formal Shalwar Suit", description: "Tailored fit with silk-blend fabric", price: 120, category: "Clothes", subcategory: "Stitched",
-    images: [
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=380&h=420&fit=crop&q=75"
-    ]
-  },
-  // Footwear
-  {
-    id: "Sneakers-Classic White", name: "Classic White Sneaker", description: "Clean minimal design in premium leather", price: 130, category: "Footwear", subcategory: "Sneakers",
-    images: [
-      "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=380&h=420&fit=crop&q=75"
-    ]
-  },
-  {
-    id: "Sneakers-Urban Runner", name: "Urban Runner", description: "Lightweight mesh with responsive cushion", price: 145, category: "Footwear", subcategory: "Sneakers",
-    images: [
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=380&h=420&fit=crop&q=75",
-      "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=380&h=420&fit=crop&q=75"
-    ]
-  },
   // Leather
   {
     id: "Wallets-Bifold Classic", name: "Bifold Classic Wallet", description: "Full-grain leather with 8 card slots", price: 75, category: "Leather", subcategory: "Wallets",

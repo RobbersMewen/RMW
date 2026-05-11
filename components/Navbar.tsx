@@ -16,23 +16,6 @@ const navDropdowns = [
     ]
   },
   {
-    label: "Clothes",
-    href: "/clothes",
-    items: [
-      { label: "Stitched", href: "/clothes/stitched", note: "Ready-to-wear premium fits" },
-      { label: "Unstitched", href: "/clothes/unstitched", note: "Fine fabrics for custom tailoring" }
-    ]
-  },
-  {
-    label: "Footwear",
-    href: "/footwear",
-    items: [
-      { label: "Slippers", href: "/footwear/slippers", note: "Comfort meets luxury" },
-      { label: "Sneakers", href: "/footwear/sneakers", note: "Modern street-ready styles" },
-      { label: "Crocs", href: "/footwear/crocs", note: "Casual everyday ease" }
-    ]
-  },
-  {
     label: "Leather",
     href: "/leather",
     items: [

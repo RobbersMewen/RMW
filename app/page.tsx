@@ -7,9 +7,9 @@ import { AddToCartButton } from "@/components/ui/AddToCartButton";
 
 const featured = [
   { id: "perfume-crown-of-amber", name: "Crown of Amber", price: 189, category: "Perfume", href: "/collection/arabic-perfume", image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=480&fit=crop&q=75" },
-  { id: "clothes-classic-kurta", name: "Classic Kurta", price: 85, category: "Clothes", href: "/clothes/stitched", image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=480&fit=crop&q=75" },
+  { id: "leather-bifold-wallet", name: "Bifold Classic Wallet", price: 75, category: "Leather", href: "/leather/wallets", image: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400&h=480&fit=crop&q=75" },
   { id: "perfume-velvet-saffron", name: "Velvet Saffron Oud", price: 275, category: "Perfume", href: "/collection/arabic-perfume", image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&h=480&fit=crop&q=75" },
-  { id: "clothes-lawn-premium", name: "Lawn Premium", price: 65, category: "Clothes", href: "/clothes/unstitched", image: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=480&fit=crop&q=75" },
+  { id: "leather-formal-belt", name: "Classic Formal Belt", price: 65, category: "Leather", href: "/leather/belts", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=480&fit=crop&q=75" },
 ];
 
 export default function Home() {
@@ -23,15 +23,14 @@ export default function Home() {
             <span>MEWEN</span>
           </h1>
           <p className="brand-home-copy">
-            A modern lifestyle brand with bold elegance — perfumes, clothes, footwear,
-            and leather goods crafted for those who demand more.
+            A modern lifestyle brand with bold elegance — perfumes and leather goods crafted for those who demand more.
           </p>
           <div className="hero-actions">
             <Link href="/collection" className="primary-button">
               Shop Perfumes
             </Link>
-            <Link href="/clothes" className="secondary-button">
-              Shop Clothes
+            <Link href="/leather" className="secondary-button">
+              Shop Leather
             </Link>
           </div>
         </div>

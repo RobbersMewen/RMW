@@ -10,6 +10,8 @@ type Props = {
 
 export function ImageCarousel({ images, alt }: Props) {
   const [index, setIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const prev = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -23,8 +25,38 @@ export function ImageCarousel({ images, alt }: Props) {
     setIndex((i) => (i === images.length - 1 ? 0 : i + 1));
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 50;
+    
+    if (distance > minSwipeDistance) {
+      setIndex((i) => (i === images.length - 1 ? 0 : i + 1));
+    }
+    
+    if (distance < -minSwipeDistance) {
+      setIndex((i) => (i === 0 ? images.length - 1 : i - 1));
+    }
+    
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
   return (
-    <div className="carousel">
+    <div 
+      className="carousel"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <Image
         src={images[index]}
         alt={`${alt} - view ${index + 1}`}
