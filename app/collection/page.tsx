@@ -1,8 +1,13 @@
-import { CollectionGrid } from "@/components/CollectionGrid";
 import { PageIntro } from "@/components/PageIntro";
 import { PageShell } from "@/components/PageShell";
+import { getProductsByCategory } from "@/store/products";
+import { ProductGrid } from "@/components/ProductGrid";
 
-export default function CollectionPage() {
+export const revalidate = 60;
+
+export default async function CollectionPage() {
+  const products = await getProductsByCategory("Perfume");
+
   return (
     <PageShell>
       <PageIntro
@@ -11,7 +16,11 @@ export default function CollectionPage() {
         description="A refined line of modern compositions with glossy depth, clean projection, and long-wear elegance."
         tone="gold"
       />
-      <CollectionGrid />
+      <section id="collection" className="section section-spacing">
+        <div className="container">
+          <ProductGrid products={products} category="Perfume" />
+        </div>
+      </section>
     </PageShell>
   );
 }

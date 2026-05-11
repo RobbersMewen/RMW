@@ -1,23 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { ImageCarousel } from "@/components/ui/ImageCarousel";
 import { AddToCartWithQty } from "@/components/ui/AddToCartWithQty";
 import { WishlistButton } from "@/components/ui/WishlistButton";
-import { getProductsBySubcategory, ProductData } from "@/store/products";
+import { ProductData } from "@/store/products";
 
 type Props = {
-  subcategory: string;
+  products: ProductData[];
   category: string;
 };
 
-export function CollectionCategoryDetail({ subcategory, category }: Props) {
-  const [products, setProducts] = useState<ProductData[]>([]);
-
-  useEffect(() => {
-    getProductsBySubcategory(subcategory).then(setProducts);
-  }, [subcategory]);
-
+export function CollectionCategoryDetail({ products, category }: Props) {
   return (
     <section className="section">
       <div className="container">

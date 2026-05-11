@@ -50,3 +50,17 @@ export async function getProductsBySubcategory(subcategory: string): Promise<Pro
 
   return data || [];
 }
+
+export async function getFeaturedProducts(): Promise<ProductData[]> {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .in('id', ['perfume-crown-of-amber', 'leather-bifold-classic', 'perfume-noir-petale', 'leather-classic-formal']);
+
+  if (error) {
+    console.error('Error fetching featured:', error);
+    return [];
+  }
+
+  return data || [];
+}

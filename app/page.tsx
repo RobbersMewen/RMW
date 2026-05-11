@@ -1,26 +1,12 @@
-"use client";
-
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
 import { PageShell } from "@/components/PageShell";
-import { AddToCartButton } from "@/components/ui/AddToCartButton";
-import { getAllProducts, ProductData } from "@/store/products";
+import { getFeaturedProducts } from "@/store/products";
+import { HomeFeatured } from "@/components/HomeFeatured";
+import Link from "next/link";
 
-export default function Home() {
-  const [featured, setFeatured] = useState<ProductData[]>([]);
+export const revalidate = 60; // Revalidate every 60 seconds
 
-  useEffect(() => {
-    getAllProducts().then((products) => {
-      const picks = [
-        products.find((p) => p.id === "perfume-crown-of-amber"),
-        products.find((p) => p.id === "leather-bifold-classic"),
-        products.find((p) => p.id === "perfume-noir-petale"),
-        products.find((p) => p.id === "leather-classic-formal"),
-      ].filter(Boolean) as ProductData[];
-      setFeatured(picks);
-    });
-  }, []);
+export default async function Home() {
+  const featured = await getFeaturedProducts();
 
   return (
     <PageShell>
@@ -51,41 +37,7 @@ export default function Home() {
             <p className="eyebrow">Bestsellers</p>
             <h2>Most loved by our customers.</h2>
           </div>
-          <div className="featured-grid">
-            {featured.map((item) => (
-              <div key={item.id} className="featured-card glass-card">
-                <Link href={item.category === "Perfume" ? "/collection" : "/leather"}>
-                  <div className="featured-img-wrap">
-                    <Image
-                      src={item.images[0]}
-                      alt={item.name}
-                      width={400}
-                      height={480}
-                      className="product-img"
-                      priority
-                      sizes="(max-width: 920px) 50vw, 25vw"
-                    />
-                  </div>
-                  <div className="featured-body">
-                    <div>
-                      <p className="product-tone">{item.category}</p>
-                      <h3>{item.name}</h3>
-                    </div>
-                    <span className="product-price">${item.price}</span>
-                  </div>
-                </Link>
-                <div className="featured-cart-wrap">
-                  <AddToCartButton
-                    id={item.id}
-                    name={item.name}
-                    price={item.price}
-                    image={item.images[0]}
-                    category={item.category}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+          <HomeFeatured products={featured} />
         </div>
       </section>
     </PageShell>
