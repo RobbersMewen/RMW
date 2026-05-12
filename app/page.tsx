@@ -1,9 +1,10 @@
 import { PageShell } from "@/components/PageShell";
 import { getFeaturedProducts } from "@/store/products";
 import { HomeFeatured } from "@/components/HomeFeatured";
+import { HeroTextSlider } from "@/components/ui/HeroTextSlider";
 import Link from "next/link";
 
-export const revalidate = 60; // Revalidate every 60 seconds
+export const revalidate = 60;
 
 export default async function Home() {
   const featured = await getFeaturedProducts();
@@ -12,13 +13,10 @@ export default async function Home() {
     <PageShell>
       <section className="brand-home section">
         <div className="container brand-home-shell">
-          <p className="eyebrow">Luxury Lifestyle Brand</p>
-          <h1 className="brand-wordmark">
-            ROBBERS
-            <span>MEWEN</span>
-          </h1>
+          <p className="eyebrow">Exclusive Fragrance & Leather House</p>
+          <HeroTextSlider />
           <p className="brand-home-copy">
-            A modern lifestyle brand with bold elegance — perfumes and leather goods crafted for those who demand more.
+            Where scent meets craft. Signature perfumes and handcrafted leather — designed for those who wear their identity.
           </p>
           <div className="hero-actions">
             <Link href="/collection" className="primary-button">
