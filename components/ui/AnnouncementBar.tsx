@@ -9,7 +9,7 @@ export function AnnouncementBar() {
 
   return (
     <div className="announcement-bar">
-      <p>🚚 Free shipping on orders over $100 — <strong>Shop Now</strong></p>
+      <p>🚚 Free shipping on orders over Rs 10,000 — <strong>Shop Now</strong></p>
       <button
         className="announcement-close"
         onClick={() => setVisible(false)}

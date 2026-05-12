@@ -93,7 +93,7 @@ export default function SearchPage() {
                     <p className="product-tone">{item.subcategory}</p>
                     <h3>{item.name}</h3>
                     <p>{item.description}</p>
-                    <span className="product-price">${item.price}</span>
+                    <span className="product-price">Rs {item.price.toLocaleString()}</span>
                     <AddToCartButton
                       id={item.id}
                       name={item.name}

@@ -27,7 +27,7 @@ export function HomeFeatured({ products }: { products: ProductData[] }) {
                 <p className="product-tone">{item.category}</p>
                 <h3>{item.name}</h3>
               </div>
-              <span className="product-price">${item.price}</span>
+              <span className="product-price" suppressHydrationWarning>Rs {item.price.toLocaleString()}</span>
             </div>
           </Link>
           <div className="featured-cart-wrap">

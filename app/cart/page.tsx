@@ -66,7 +66,7 @@ export default function CartPage() {
                         <div>
                           <p className="cart-item-category">{item.category}</p>
                           <h3>{item.name}</h3>
-                          <p className="cart-item-unit">${item.price} each</p>
+                          <p className="cart-item-unit">Rs {item.price.toLocaleString()} each</p>
                         </div>
                         <button
                           className="cart-remove-btn"
@@ -82,7 +82,7 @@ export default function CartPage() {
                           <span>{item.quantity}</span>
                           <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                         </div>
-                        <span className="product-price">${(item.price * item.quantity).toFixed(2)}</span>
+                        <span className="product-price">Rs {(item.price * item.quantity).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -97,19 +97,19 @@ export default function CartPage() {
                 <h2>Order Summary</h2>
                 <div className="summary-row">
                   <span>Items ({itemCount})</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>Rs {subtotal.toLocaleString()}</span>
                 </div>
                 <div className="summary-row">
                   <span>Shipping</span>
-                  <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                  <span>{shipping === 0 ? "Free" : `Rs ${shipping}`}</span>
                 </div>
                 {shipping > 0 && (
-                  <p className="shipping-note">Free shipping on orders over $100</p>
+                  <p className="shipping-note">Free shipping on orders over Rs 10,000</p>
                 )}
                 <div className="summary-divider" />
                 <div className="summary-row summary-total">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>Rs {total.toLocaleString()}</span>
                 </div>
                 <Link href="/checkout" className="primary-button checkout-btn">
                   Proceed to Checkout
@@ -145,7 +145,7 @@ export default function CartPage() {
                         <p className="product-tone">{item.category}</p>
                         <h3>{item.name}</h3>
                       </div>
-                      <span className="product-price">${item.price}</span>
+                      <span className="product-price">Rs {item.price.toLocaleString()}</span>
                     </div>
                     <div className="featured-cart-wrap">
                       <button

@@ -30,7 +30,7 @@ export function CollectionCategoryDetail({ products, category }: Props) {
               <div className="product-body">
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>
-                <span className="product-price">${item.price}</span>
+                <span className="product-price" suppressHydrationWarning>Rs {item.price.toLocaleString()}</span>
                 <AddToCartWithQty
                   id={item.id}
                   name={item.name}

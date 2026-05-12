@@ -192,7 +192,7 @@ export default function CheckoutPage() {
               {error && <p className="promo-error">{error}</p>}
 
               <button type="submit" className="primary-button place-order-btn" disabled={loading}>
-                {loading ? "Placing Order..." : `Place Order — $${total.toFixed(2)}`}
+                {loading ? "Placing Order..." : `Place Order — Rs ${total.toLocaleString()}`}
               </button>
             </div>
 
@@ -202,7 +202,7 @@ export default function CheckoutPage() {
                 {items.map((item) => (
                   <div key={item.id} className="checkout-item">
                     <span>{item.name} × {item.quantity}</span>
-                    <span>${(item.price * item.quantity).toFixed(2)}</span>
+                    <span>Rs {(item.price * item.quantity).toLocaleString()}</span>
                   </div>
                 ))}
               </div>
@@ -228,22 +228,22 @@ export default function CheckoutPage() {
               <div className="summary-divider" />
               <div className="summary-row">
                 <span>Subtotal ({itemCount} items)</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>Rs {subtotal.toLocaleString()}</span>
               </div>
               {discount > 0 && (
                 <div className="summary-row summary-discount">
                   <span>Discount ({discount}%)</span>
-                  <span>-${discountAmount.toFixed(2)}</span>
+                  <span>-Rs {discountAmount.toLocaleString()}</span>
                 </div>
               )}
               <div className="summary-row">
                 <span>Shipping</span>
-                <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                <span>{shipping === 0 ? "Free" : `Rs ${shipping}`}</span>
               </div>
               <div className="summary-divider" />
               <div className="summary-row summary-total">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>Rs {total.toLocaleString()}</span>
               </div>
             </div>
           </form>
