@@ -1,20 +1,29 @@
 import { PageShell } from "@/components/PageShell";
-import { getFeaturedProducts } from "@/store/products";
+import { getFeaturedProducts, getAllProducts } from "@/store/products";
 import { HomeFeatured } from "@/components/HomeFeatured";
-import { HeroTextSlider } from "@/components/ui/HeroTextSlider";
+import { HeroMarquee } from "@/components/ui/HeroMarquee";
 import Link from "next/link";
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const featured = await getFeaturedProducts();
+  const [featured, allProducts] = await Promise.all([
+    getFeaturedProducts(),
+    getAllProducts(),
+  ]);
 
   return (
     <PageShell>
       <section className="brand-home section">
         <div className="container brand-home-shell">
           <p className="eyebrow">Exclusive Fragrance & Leather House</p>
-          <HeroTextSlider />
+          <h1 className="brand-wordmark">
+            ROBBERS
+            <span>MEWEN</span>
+          </h1>
+        </div>
+        <HeroMarquee products={allProducts} />
+        <div className="container brand-home-shell">
           <p className="brand-home-copy">
             Where scent meets craft. Signature perfumes and handcrafted leather — designed for those who wear their identity.
           </p>

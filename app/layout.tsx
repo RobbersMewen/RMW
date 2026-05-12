@@ -59,7 +59,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="theme-color" content="#060d14" />
+        <meta name="theme-color" content="#fafafa" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={`${headingFont.variable} ${bodyFont.variable} ${displayFont.variable}`}>
