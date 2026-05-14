@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "@/components/ui/Toast";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { MagneticEffect } from "@/components/MagneticEffect";
+import { CursorFollower } from "@/components/CursorFollower";
 import "./globals.css";
 
 const headingFont = Playfair_Display({
@@ -66,6 +67,7 @@ export default function RootLayout({
       <body className={`${headingFont.variable} ${bodyFont.variable} ${displayFont.variable}`}>
         {children}
         <MagneticEffect />
+        <CursorFollower />
         <ToastContainer />
         <WhatsAppButton />
         <Analytics />
