@@ -1,16 +1,13 @@
 import { PageShell } from "@/components/PageShell";
-import { getFeaturedProducts, getAllProducts } from "@/store/products";
-import { HomeFeatured } from "@/components/HomeFeatured";
+import { getAllProducts } from "@/store/products";
 import { HeroMarquee } from "@/components/ui/HeroMarquee";
+import { AdReveal } from "@/components/AdReveal";
 import Link from "next/link";
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const [featured, allProducts] = await Promise.all([
-    getFeaturedProducts(),
-    getAllProducts(),
-  ]);
+  const allProducts = await getAllProducts();
 
   return (
     <PageShell>
@@ -38,14 +35,21 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section section-spacing">
-        <div className="container">
-          <div className="section-head">
-            <p className="eyebrow">Bestsellers</p>
-            <h2>Most loved by our customers.</h2>
+      <section className="ad-reveal-section">
+        <AdReveal>
+          <video
+            className="ad-video"
+            src="https://videos.pexels.com/video-files/5765206/5765206-uhd_2560_1440_25fps.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+          <div className="ad-overlay">
+            <p className="eyebrow">Coming Soon</p>
+            <h2>The Campaign</h2>
           </div>
-          <HomeFeatured products={featured} />
-        </div>
+        </AdReveal>
       </section>
     </PageShell>
   );
