@@ -3,6 +3,7 @@ import { Playfair_Display, Plus_Jakarta_Sans, Cormorant_Garamond } from "next/fo
 import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "@/components/ui/Toast";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { MagneticEffect } from "@/components/MagneticEffect";
 import "./globals.css";
 
 const headingFont = Playfair_Display({
@@ -64,6 +65,7 @@ export default function RootLayout({
       </head>
       <body className={`${headingFont.variable} ${bodyFont.variable} ${displayFont.variable}`}>
         {children}
+        <MagneticEffect />
         <ToastContainer />
         <WhatsAppButton />
         <Analytics />
