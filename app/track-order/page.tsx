@@ -5,35 +5,38 @@ import { PageShell } from "@/components/PageShell";
 
 type Order = {
   order_number: string;
-  customer_name: string;
   status: string;
   items: { name: string; quantity: number; price: number }[];
   total: number;
   shipping: number;
+  discount?: number;
   payment_method: string;
   created_at: string;
 };
 
 export default function TrackOrderPage() {
   const [orderNumber, setOrderNumber] = useState("");
+  const [email, setEmail] = useState("");
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!orderNumber.trim()) return;
+    if (!orderNumber.trim() || !email.trim()) return;
 
     setLoading(true);
     setError("");
     setOrder(null);
 
     try {
-      const res = await fetch(`/api/orders/${orderNumber.trim()}`);
+      const res = await fetch(`/api/orders/${orderNumber.trim()}?email=${encodeURIComponent(email.trim())}`);
       const data = await res.json();
 
       if (!res.ok) {
-        setError("Order not found. Please check your order number.");
+        setError(data.error || "Order not found. Please check your order number and email.");
       } else {
         setOrder(data.order);
       }
@@ -61,16 +64,25 @@ export default function TrackOrderPage() {
         <div className="container">
           <h1 className="cart-title">Track Your Order</h1>
 
-          <form onSubmit={handleTrack} className="search-bar" style={{ maxWidth: 500 }}>
+          <form onSubmit={handleTrack} style={{ maxWidth: 500, display: "flex", flexDirection: "column", gap: "0.8rem" }}>
             <input
               type="text"
-              placeholder="Enter order number (e.g. RM-ABC123-XY4Z)"
+              placeholder="Order number (e.g. RM-ABC123-XY4Z)"
               value={orderNumber}
               onChange={(e) => setOrderNumber(e.target.value)}
               className="search-input"
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email used during checkout"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="search-input"
+              required
             />
             <button type="submit" className="primary-button" disabled={loading}>
-              {loading ? "..." : "Track"}
+              {loading ? "Tracking..." : "Track Order"}
             </button>
           </form>
 
@@ -82,12 +94,18 @@ export default function TrackOrderPage() {
             </div>
           )}
 
+          {success && (
+            <div className="order-success glass-card" style={{ marginTop: "1.5rem" }}>
+              <div className="success-icon">✓</div>
+              <p>{success}</p>
+            </div>
+          )}
+
           {order && (
-            <div className="glass-card" style={{ padding: "1.5rem", marginTop: "1.5rem" }}>
+            <div className="glass-card" style={{ padding: "1.5rem", marginTop: "1.5rem", border: "1px solid var(--line)", borderRadius: "16px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
                 <div>
                   <p className="cart-item-category">Order #{order.order_number}</p>
-                  <h2 style={{ fontSize: "1.1rem", margin: 0 }}>{order.customer_name}</h2>
                 </div>
                 <span className="pill-button">{statusLabel(order.status)}</span>
               </div>
@@ -98,26 +116,64 @@ export default function TrackOrderPage() {
                 {order.items.map((item, i) => (
                   <div key={i} className="checkout-item">
                     <span>{item.name} × {item.quantity}</span>
-                    <span>${(item.price * item.quantity).toFixed(2)}</span>
+                    <span>Rs {(item.price * item.quantity).toLocaleString()}</span>
                   </div>
                 ))}
               </div>
 
               <div className="summary-divider" />
 
+              {order.discount && order.discount > 0 && (
+                <div className="summary-row summary-discount">
+                  <span>Discount</span>
+                  <span>-Rs {order.discount.toLocaleString()}</span>
+                </div>
+              )}
               <div className="summary-row">
                 <span>Shipping</span>
-                <span>{order.shipping === 0 ? "Free" : `$${order.shipping}`}</span>
+                <span>{order.shipping === 0 ? "Free" : `Rs ${order.shipping.toLocaleString()}`}</span>
               </div>
               <div className="summary-row summary-total">
                 <span>Total</span>
-                <span>${order.total}</span>
+                <span>Rs {order.total.toLocaleString()}</span>
               </div>
 
               <div style={{ marginTop: "1rem", fontSize: "0.82rem", color: "var(--muted)" }}>
                 <p style={{ margin: 0 }}>Payment: {order.payment_method === "cod" ? "Cash on Delivery" : "Bank Transfer"}</p>
                 <p style={{ margin: "0.2rem 0 0" }}>Placed: {new Date(order.created_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
               </div>
+
+              {order.status === "pending" && (
+                <button
+                  type="button"
+                  className="cart-clear-btn"
+                  style={{ marginTop: "1rem", color: "#ef5350", fontSize: "0.88rem" }}
+                  disabled={cancelling}
+                  onClick={async () => {
+                    if (!confirm("Are you sure you want to cancel this order?")) return;
+                    setCancelling(true);
+                    try {
+                      const res = await fetch(`/api/orders/${order.order_number}`, {
+                        method: "PATCH",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email: email.trim(), action: "cancel" }),
+                      });
+                      const data = await res.json();
+                      if (res.ok) {
+                        setOrder({ ...order, status: "cancelled" });
+                        setSuccess("Order cancelled successfully.");
+                      } else {
+                        setError(data.error || "Failed to cancel");
+                      }
+                    } catch {
+                      setError("Something went wrong.");
+                    }
+                    setCancelling(false);
+                  }}
+                >
+                  {cancelling ? "Cancelling..." : "Cancel Order"}
+                </button>
+              )}
             </div>
           )}
         </div>

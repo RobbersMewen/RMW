@@ -56,7 +56,7 @@ export default function WishlistPage() {
                   <div className="product-body">
                     <p className="product-tone">{item.category}</p>
                     <h3>{item.name}</h3>
-                    <span className="product-price">${item.price}</span>
+                    <span className="product-price">Rs {item.price.toLocaleString()}</span>
                     <button
                       type="button"
                       className="add-to-cart-btn"

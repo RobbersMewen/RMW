@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email } = body;
+    const email = String(body.email || "").trim().toLowerCase().slice(0, 150);
 
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    if (!email || !EMAIL_REGEX.test(email)) {
+      return NextResponse.json({ error: "Valid email is required" }, { status: 400 });
     }
 
-    // Check if already subscribed
     const { data: existing } = await supabase
       .from("subscribers")
       .select("id")

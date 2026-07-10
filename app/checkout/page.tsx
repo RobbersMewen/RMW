@@ -1,6 +1,7 @@
 "use client";
 
 import { useCartStore, getCartTotal, getCartCount } from "@/store/cart";
+import { useAuthStore } from "@/store/auth";
 import { PageShell } from "@/components/PageShell";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
@@ -15,6 +16,7 @@ export default function CheckoutPage() {
   const items = useCartStore((s) => s.items);
   const clearCart = useCartStore((s) => s.clearCart);
   const loadCart = useCartStore((s) => s.loadCart);
+  const { user, init } = useAuthStore();
   const [placed, setPlaced] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,13 +26,13 @@ export default function CheckoutPage() {
   const [promoError, setPromoError] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
 
-  useEffect(() => { loadCart(); }, [loadCart]);
+  useEffect(() => { loadCart(); init(); }, [loadCart, init]);
 
   const subtotal = getCartTotal(items);
   const itemCount = getCartCount(items);
   const discountAmount = (subtotal * discount) / 100;
   const afterDiscount = subtotal - discountAmount;
-  const shipping = afterDiscount >= 100 ? 0 : 12;
+  const shipping = afterDiscount >= 10000 ? 0 : 200;
   const total = afterDiscount + shipping;
 
   const applyPromo = () => {
@@ -61,6 +63,8 @@ export default function CheckoutPage() {
       address: formData.get("address"),
       city: formData.get("city"),
       payment_method: formData.get("payment_method"),
+      discount_percent: discount,
+      promo_code: promoApplied ? promoCode.trim().toUpperCase() : null,
       items: items.map((item) => ({
         id: item.id,
         name: item.name,
@@ -153,7 +157,7 @@ export default function CheckoutPage() {
 
               <div className="form-field">
                 <label htmlFor="email">Email</label>
-                <input id="email" name="email" type="email" required placeholder="john@example.com" />
+                <input id="email" name="email" type="email" required placeholder="john@example.com" defaultValue={user?.email || ""} />
               </div>
 
               <div className="form-field">

@@ -29,7 +29,7 @@ export default function CartPage() {
 
   const subtotal = getCartTotal(items);
   const itemCount = getCartCount(items);
-  const shipping = subtotal >= 100 ? 0 : 12;
+  const shipping = subtotal >= 10000 ? 0 : 200;
   const total = items.length > 0 ? subtotal + shipping : 0;
 
   return (

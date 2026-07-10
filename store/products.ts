@@ -15,39 +15,29 @@ export async function getAllProducts(): Promise<ProductData[]> {
     .from('products')
     .select('*');
 
-  if (error) {
-    console.error('Error fetching products:', error);
-    return [];
-  }
-
+  if (error) return [];
   return data || [];
 }
 
 export async function getProductsByCategory(category: string): Promise<ProductData[]> {
+  const safe = String(category).replace(/[\r\n]/g, '');
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('category', category);
+    .eq('category', safe);
 
-  if (error) {
-    console.error('Error fetching products:', error);
-    return [];
-  }
-
+  if (error) return [];
   return data || [];
 }
 
 export async function getProductsBySubcategory(subcategory: string): Promise<ProductData[]> {
+  const safe = String(subcategory).replace(/[\r\n]/g, '');
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('subcategory', subcategory);
+    .eq('subcategory', safe);
 
-  if (error) {
-    console.error('Error fetching products:', error);
-    return [];
-  }
-
+  if (error) return [];
   return data || [];
 }
 
@@ -57,10 +47,6 @@ export async function getFeaturedProducts(): Promise<ProductData[]> {
     .select('*')
     .in('id', ['perfume-crown-of-amber', 'leather-bifold-classic', 'perfume-noir-petale', 'leather-classic-formal']);
 
-  if (error) {
-    console.error('Error fetching featured:', error);
-    return [];
-  }
-
+  if (error) return [];
   return data || [];
 }
