@@ -8,57 +8,50 @@ const RADIUS = 100; // pixel distance to start attracting
 
 export function MagneticEffect() {
   useEffect(() => {
-    const elements = new Set<HTMLElement>();
+    let rafId: number;
+    let mouseX = 0, mouseY = 0;
 
     function handleMouseMove(e: MouseEvent) {
-      elements.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+      mouseX = e.clientX;
+      mouseY = e.clientY;
 
-        if (dist < RADIUS) {
-          const pull = (1 - dist / RADIUS) * STRENGTH;
-          el.style.transform = `translate(${dx * pull}px, ${dy * pull}px)`;
-          el.style.transition = "transform 0.2s ease-out";
-        } else {
-          el.style.transform = "";
-          el.style.transition = "transform 0.4s ease-out";
-        }
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        document.querySelectorAll<HTMLElement>(SELECTORS).forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = mouseX - cx;
+          const dy = mouseY - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < RADIUS) {
+            const pull = (1 - dist / RADIUS) * STRENGTH;
+            el.style.transform = `translate(${dx * pull}px, ${dy * pull}px)`;
+            el.style.transition = "transform 0.2s ease-out";
+          } else if (el.style.transform) {
+            el.style.transform = "";
+            el.style.transition = "transform 0.4s ease-out";
+          }
+        });
       });
     }
 
     function handleMouseLeave() {
-      elements.forEach((el) => {
+      cancelAnimationFrame(rafId);
+      document.querySelectorAll<HTMLElement>(SELECTORS).forEach((el) => {
         el.style.transform = "";
         el.style.transition = "transform 0.4s ease-out";
       });
     }
 
-    function collectElements() {
-      elements.clear();
-      document.querySelectorAll<HTMLElement>(SELECTORS).forEach((el) => {
-        elements.add(el);
-      });
-    }
-
-    collectElements();
-    const observer = new MutationObserver(collectElements);
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
+      cancelAnimationFrame(rafId);
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
-      observer.disconnect();
-      elements.forEach((el) => {
-        el.style.transform = "";
-        el.style.transition = "";
-      });
     };
   }, []);
 

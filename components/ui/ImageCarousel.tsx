@@ -14,19 +14,21 @@ export function ImageCarousel({ images, alt, priority = false }: Props) {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
-  // Preload adjacent images
+  // Preload adjacent images — cleanup on unmount
   useEffect(() => {
     if (images.length <= 1) return;
+    const links: HTMLLinkElement[] = [];
     const nextIdx = (index + 1) % images.length;
     const prevIdx = index === 0 ? images.length - 1 : index - 1;
-
     [nextIdx, prevIdx].forEach((i) => {
       const link = document.createElement("link");
       link.rel = "prefetch";
       link.as = "image";
       link.href = images[i];
       document.head.appendChild(link);
+      links.push(link);
     });
+    return () => links.forEach((l) => l.parentNode?.removeChild(l));
   }, [index, images]);
 
   const prev = (e: React.MouseEvent) => {

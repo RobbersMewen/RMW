@@ -9,7 +9,6 @@ export function NewsletterPopup() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    localStorage.removeItem("rm-newsletter-dismissed");
     setShow(true);
   }, []);
 
