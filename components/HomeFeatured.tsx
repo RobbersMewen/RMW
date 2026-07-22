@@ -10,7 +10,7 @@ export function HomeFeatured({ products }: { products: ProductData[] }) {
     <div className="featured-grid">
       {products.map((item) => (
         <div key={item.id} className="featured-card glass-card">
-          <Link href={item.category === "Perfume" ? "/collection" : "/leather"}>
+          <Link href={`/product/${item.id}`}>
             <div className="featured-img-wrap">
               <Image
                 src={item.images[0]}

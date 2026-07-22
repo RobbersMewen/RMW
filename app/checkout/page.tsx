@@ -25,8 +25,13 @@ export default function CheckoutPage() {
   const [discount, setDiscount] = useState(0);
   const [promoError, setPromoError] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
+  const [savedAddress, setSavedAddress] = useState<Record<string, string>>({});
 
-  useEffect(() => { loadCart(); init(); }, [loadCart, init]);
+  useEffect(() => {
+    loadCart();
+    init();
+    try { setSavedAddress(JSON.parse(localStorage.getItem("rm-address") || "{}")); } catch {}
+  }, [loadCart, init]);
 
   const subtotal = getCartTotal(items);
   const itemCount = getCartCount(items);
@@ -62,6 +67,7 @@ export default function CheckoutPage() {
       customer_phone: formData.get("phone"),
       address: formData.get("address"),
       city: formData.get("city"),
+      zip: formData.get("zip"),
       payment_method: formData.get("payment_method"),
       discount_percent: discount,
       promo_code: promoApplied ? promoCode.trim().toUpperCase() : null,
@@ -73,6 +79,15 @@ export default function CheckoutPage() {
         image: item.image,
       })),
     };
+
+    localStorage.setItem("rm-address", JSON.stringify({
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      phone: formData.get("phone"),
+      address: formData.get("address"),
+      city: formData.get("city"),
+      zip: formData.get("zip"),
+    }));
 
     try {
       const res = await fetch("/api/orders", {
@@ -153,11 +168,11 @@ export default function CheckoutPage() {
               <div className="form-row">
                 <div className="form-field">
                   <label htmlFor="firstName">First Name</label>
-                  <input id="firstName" name="firstName" type="text" required placeholder="John" />
+                  <input id="firstName" name="firstName" type="text" required placeholder="John" defaultValue={savedAddress.firstName || ""} />
                 </div>
                 <div className="form-field">
                   <label htmlFor="lastName">Last Name</label>
-                  <input id="lastName" name="lastName" type="text" required placeholder="Doe" />
+                  <input id="lastName" name="lastName" type="text" required placeholder="Doe" defaultValue={savedAddress.lastName || ""} />
                 </div>
               </div>
 
@@ -168,22 +183,22 @@ export default function CheckoutPage() {
 
               <div className="form-field">
                 <label htmlFor="phone">Phone</label>
-                <input id="phone" name="phone" type="tel" required placeholder="+92 300 1234567" />
+                <input id="phone" name="phone" type="tel" required placeholder="03001234567" defaultValue={savedAddress.phone || ""} />
               </div>
 
               <div className="form-field">
                 <label htmlFor="address">Address</label>
-                <input id="address" name="address" type="text" required placeholder="123 Main Street" />
+                <input id="address" name="address" type="text" required placeholder="123 Main Street" defaultValue={savedAddress.address || ""} />
               </div>
 
               <div className="form-row">
                 <div className="form-field">
                   <label htmlFor="city">City</label>
-                  <input id="city" name="city" type="text" required placeholder="Lahore" />
+                  <input id="city" name="city" type="text" required placeholder="Lahore" defaultValue={savedAddress.city || ""} />
                 </div>
                 <div className="form-field">
                   <label htmlFor="zip">ZIP Code</label>
-                  <input id="zip" name="zip" type="text" required placeholder="54000" />
+                  <input id="zip" name="zip" type="text" required placeholder="54000" defaultValue={savedAddress.zip || ""} />
                 </div>
               </div>
 

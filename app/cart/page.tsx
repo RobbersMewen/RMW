@@ -8,6 +8,8 @@ import { PageShell } from "@/components/PageShell";
 import { getAllProducts, ProductData } from "@/store/products";
 import { useEffect, useState } from "react";
 
+import { RecentlyViewed } from "@/components/RecentlyViewed";
+
 export default function CartPage() {
   const items = useCartStore((s) => s.items);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
@@ -161,6 +163,8 @@ export default function CartPage() {
               </div>
             </div>
           )}
+
+          <RecentlyViewed />
         </div>
       </section>
     </PageShell>

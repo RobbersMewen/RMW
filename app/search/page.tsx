@@ -14,6 +14,7 @@ export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState<SortOption>("default");
+  const [priceRange, setPriceRange] = useState("all");
 
   useEffect(() => {
     getAllProducts().then(setProducts);
@@ -24,7 +25,13 @@ export default function SearchPage() {
       p.name.toLowerCase().includes(query.toLowerCase()) ||
       p.description.toLowerCase().includes(query.toLowerCase());
     const matchesCategory = category === "all" || p.category === category;
-    return matchesQuery && matchesCategory;
+    const matchesPrice =
+      priceRange === "all" ? true :
+      priceRange === "0-500" ? p.price <= 500 :
+      priceRange === "500-1500" ? p.price > 500 && p.price <= 1500 :
+      priceRange === "1500-3000" ? p.price > 1500 && p.price <= 3000 :
+      p.price > 3000;
+    return matchesQuery && matchesCategory && matchesPrice;
   });
 
   if (sort === "price-low") filtered = [...filtered].sort((a, b) => a.price - b.price);
@@ -46,20 +53,19 @@ export default function SearchPage() {
               className="search-input"
               autoFocus
             />
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="search-filter"
-            >
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className="search-filter">
               <option value="all">All Categories</option>
-              <option value="Perfume">Perfume</option>
-              <option value="Leather">Leather</option>
+              <option value="perfume">Perfume</option>
+              <option value="leather">Leather</option>
             </select>
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as SortOption)}
-              className="search-filter"
-            >
+            <select value={priceRange} onChange={(e) => setPriceRange(e.target.value)} className="search-filter">
+              <option value="all">All Prices</option>
+              <option value="0-500">Under Rs 500</option>
+              <option value="500-1500">Rs 500 – 1,500</option>
+              <option value="1500-3000">Rs 1,500 – 3,000</option>
+              <option value="3000+">Above Rs 3,000</option>
+            </select>
+            <select value={sort} onChange={(e) => setSort(e.target.value as SortOption)} className="search-filter">
               <option value="default">Sort: Default</option>
               <option value="price-low">Price: Low → High</option>
               <option value="price-high">Price: High → Low</option>
