@@ -13,8 +13,8 @@ const LIMITS: Record<string, { window: number; max: number }> = {
 export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
-  // Only rate-limit API routes
-  if (!path.startsWith("/api/")) return NextResponse.next();
+  // Only rate-limit API routes (skip admin routes — they have their own auth)
+  if (!path.startsWith("/api/") || path.startsWith("/api/admin")) return NextResponse.next();
 
   const matchedPath = Object.keys(LIMITS).find((p) => path.startsWith(p));
   if (!matchedPath) return NextResponse.next();
