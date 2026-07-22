@@ -13,7 +13,8 @@ export type ProductData = {
 export async function getAllProducts(): Promise<ProductData[]> {
   const { data, error } = await supabase
     .from('products')
-    .select('*');
+    .select('*')
+    .eq('is_active', true);
 
   if (error) return [];
   return data || [];
@@ -24,7 +25,8 @@ export async function getProductsByCategory(category: string): Promise<ProductDa
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('category', safe);
+    .eq('category', safe)
+    .eq('is_active', true);
 
   if (error) return [];
   return data || [];
@@ -35,7 +37,8 @@ export async function getProductsBySubcategory(subcategory: string): Promise<Pro
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('subcategory', safe);
+    .eq('subcategory', safe)
+    .eq('is_active', true);
 
   if (error) return [];
   return data || [];
@@ -45,7 +48,8 @@ export async function getFeaturedProducts(): Promise<ProductData[]> {
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .in('id', ['perfume-crown-of-amber', 'leather-bifold-classic', 'perfume-noir-petale', 'leather-classic-formal']);
+    .eq('is_active', true)
+    .limit(4);
 
   if (error) return [];
   return data || [];

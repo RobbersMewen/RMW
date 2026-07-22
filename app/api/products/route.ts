@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const subcategory = searchParams.get("subcategory");
   const search = searchParams.get("search");
 
-  let query = supabase.from("products").select("*");
+  let query = supabase.from("products").select("*").eq("is_active", true);
 
   if (category) query = query.eq("category", category);
   if (subcategory) query = query.eq("subcategory", subcategory);

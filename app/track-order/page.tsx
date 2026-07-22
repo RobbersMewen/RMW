@@ -12,6 +12,20 @@ type Order = {
   discount?: number;
   payment_method: string;
   created_at: string;
+  courier?: string;
+  tracking_number?: string;
+  estimated_delivery?: string;
+};
+
+const STATUS_LABELS: Record<string, string> = {
+  pending: "⏳ Pending",
+  confirmed: "✓ Confirmed",
+  processing: "⚙ Processing",
+  shipped: "🚚 Shipped",
+  "in-transit": "📍 In Transit",
+  delivered: "✅ Delivered",
+  cancelled: "✕ Cancelled",
+  refunded: "💰 Refunded",
 };
 
 export default function TrackOrderPage() {
@@ -45,17 +59,6 @@ export default function TrackOrderPage() {
     }
 
     setLoading(false);
-  };
-
-  const statusLabel = (status: string) => {
-    const map: Record<string, string> = {
-      pending: "⏳ Pending",
-      confirmed: "✓ Confirmed",
-      shipped: "🚚 Shipped",
-      delivered: "✅ Delivered",
-      cancelled: "✕ Cancelled",
-    };
-    return map[status] || status;
   };
 
   return (
@@ -107,7 +110,7 @@ export default function TrackOrderPage() {
                 <div>
                   <p className="cart-item-category">Order #{order.order_number}</p>
                 </div>
-                <span className="pill-button">{statusLabel(order.status)}</span>
+                <span className="pill-button">{STATUS_LABELS[order.status] || order.status}</span>
               </div>
 
               <div className="summary-divider" />
@@ -137,6 +140,15 @@ export default function TrackOrderPage() {
                 <span>Total</span>
                 <span>Rs {order.total.toLocaleString()}</span>
               </div>
+
+              {(order.courier || order.tracking_number) && (
+                <div style={{ margin: "1rem 0", padding: "0.8rem", background: "#f0fdf4", borderRadius: 10, fontSize: "0.85rem" }}>
+                  <p style={{ margin: 0, fontWeight: 600 }}>📦 Shipment Info</p>
+                  {order.courier && <p style={{ margin: "0.3rem 0 0" }}>Courier: {order.courier}</p>}
+                  {order.tracking_number && <p style={{ margin: "0.2rem 0 0" }}>Tracking #: {order.tracking_number}</p>}
+                  {order.estimated_delivery && <p style={{ margin: "0.2rem 0 0" }}>Est. Delivery: {order.estimated_delivery}</p>}
+                </div>
+              )}
 
               <div style={{ marginTop: "1rem", fontSize: "0.82rem", color: "var(--muted)" }}>
                 <p style={{ margin: 0 }}>Payment: {order.payment_method === "cod" ? "Cash on Delivery" : "Bank Transfer"}</p>

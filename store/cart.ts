@@ -42,9 +42,11 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   addItem: (item) => {
+    const MAX_QTY = 10;
     const existing = get().items.find((i) => i.id === item.id);
     let newItems: CartItem[];
     if (existing) {
+      if (existing.quantity >= MAX_QTY) return;
       newItems = get().items.map((i) =>
         i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
       );
@@ -62,12 +64,13 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   updateQuantity: (id, quantity) => {
+    const MAX_QTY = 10;
     let newItems: CartItem[];
     if (quantity <= 0) {
       newItems = get().items.filter((i) => i.id !== id);
     } else {
       newItems = get().items.map((i) =>
-        i.id === id ? { ...i, quantity } : i
+        i.id === id ? { ...i, quantity: Math.min(quantity, MAX_QTY) } : i
       );
     }
     set({ items: newItems });

@@ -43,15 +43,15 @@ export default function AccountPage() {
       });
   }, [user]);
 
-  const statusLabel = (status: string) => {
-    const map: Record<string, string> = {
-      pending: "⏳ Pending",
-      confirmed: "✓ Confirmed",
-      shipped: "🚚 Shipped",
-      delivered: "✅ Delivered",
-      cancelled: "✕ Cancelled",
-    };
-    return map[status] || status;
+  const STATUS_LABELS: Record<string, string> = {
+    pending: "⏳ Pending",
+    confirmed: "✓ Confirmed",
+    processing: "⚙ Processing",
+    shipped: "🚚 Shipped",
+    "in-transit": "📍 In Transit",
+    delivered: "✅ Delivered",
+    cancelled: "✕ Cancelled",
+    refunded: "💰 Refunded",
   };
 
   if (loading) {
@@ -109,7 +109,7 @@ export default function AccountPage() {
                         {new Date(order.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
                       </p>
                     </div>
-                    <span className="pill-button" style={{ fontSize: "0.75rem" }}>{statusLabel(order.status)}</span>
+                    <span className="pill-button" style={{ fontSize: "0.75rem" }}>{STATUS_LABELS[order.status] || order.status}</span>
                   </div>
                   <div style={{ fontSize: "0.85rem", color: "var(--muted)", marginBottom: "0.5rem" }}>
                     {order.items.map((item, i) => (

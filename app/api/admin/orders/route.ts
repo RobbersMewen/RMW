@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
-const VALID_STATUSES = ["pending", "confirmed", "shipped", "delivered", "cancelled"];
+const VALID_STATUSES = ["pending", "confirmed", "processing", "shipped", "in-transit", "delivered", "cancelled", "refunded"];
 
 export async function PATCH(req: NextRequest) {
   try {

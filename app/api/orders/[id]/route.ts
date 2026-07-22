@@ -14,7 +14,7 @@ export async function GET(
 
   const { data, error } = await supabase
     .from("orders")
-    .select("order_number, status, items, subtotal, discount, shipping, total, payment_method, created_at")
+    .select("order_number, status, items, subtotal, discount, shipping, total, payment_method, created_at, courier, tracking_number, estimated_delivery")
     .eq("order_number", id)
     .eq("customer_email", email.trim().toLowerCase())
     .single();
@@ -59,7 +59,11 @@ export async function PATCH(
 
     const { error: updateError } = await supabase
       .from("orders")
-      .update({ status: "cancelled" })
+      .update({
+        status: "cancelled",
+        cancelled_at: new Date().toISOString(),
+        cancel_reason: "Customer requested",
+      })
       .eq("order_number", id)
       .eq("customer_email", email);
 

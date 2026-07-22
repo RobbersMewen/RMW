@@ -108,7 +108,13 @@ export default function CheckoutPage() {
               <div className="success-icon">✓</div>
               <h1>Order Placed!</h1>
               <p className="order-id">Order #: <strong>{orderNumber}</strong></p>
+              <p style={{ fontSize: "0.85rem", color: "var(--muted)", marginTop: "0.5rem" }}>
+                📌 Save your order number — you'll need it to track your order.
+              </p>
               <p>Thank you for shopping with Robbers Mewen. Your order is being processed and you'll receive a confirmation shortly.</p>
+              <Link href={`/track-order`} className="secondary-button" style={{ marginBottom: "0.5rem" }}>
+                Track Order
+              </Link>
               <Link href="/" className="primary-button">
                 Back to Home
               </Link>

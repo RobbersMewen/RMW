@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     const customer_phone = sanitize(body.customer_phone, 20);
     const address = sanitize(body.address, 300);
     const city = sanitize(body.city, 50);
+    const zip = sanitize(body.zip, 10);
 
     if (!customer_name || !customer_email || !customer_phone || !address || !city || !items?.length) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -37,6 +38,11 @@ export async function POST(req: NextRequest) {
 
     if (!EMAIL_REGEX.test(customer_email)) {
       return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
+    }
+
+    const PHONE_REGEX = /^(\+92|0092|0)?3[0-9]{9}$/;
+    if (!PHONE_REGEX.test(customer_phone.replace(/[\s-]/g, ""))) {
+      return NextResponse.json({ error: "Invalid phone number. Use Pakistani format e.g. 03001234567" }, { status: 400 });
     }
 
     if (!Array.isArray(items) || items.length > 50) {
@@ -66,6 +72,7 @@ export async function POST(req: NextRequest) {
         customer_phone,
         address,
         city,
+        zip: zip || null,
         items,
         subtotal,
         discount: discountAmount,
