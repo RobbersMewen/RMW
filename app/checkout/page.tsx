@@ -122,7 +122,15 @@ export default function CheckoutPage() {
             <div className="order-success glass-card">
               <div className="success-icon">✓</div>
               <h1>Order Placed!</h1>
-              <p className="order-id">Order #: <strong>{orderNumber}</strong></p>
+              <p className="order-id">Order #: <strong>{orderNumber}</strong>
+                <button
+                  type="button"
+                  onClick={() => { navigator.clipboard.writeText(orderNumber); }}
+                  style={{ marginLeft: "0.5rem", background: "none", border: "1px solid var(--line)", borderRadius: 6, padding: "2px 8px", fontSize: "0.75rem", cursor: "pointer", color: "var(--muted)" }}
+                >
+                  Copy
+                </button>
+              </p>
               <p style={{ fontSize: "0.85rem", color: "var(--muted)", marginTop: "0.5rem" }}>
                 📌 Save your order number — you'll need it to track your order.
               </p>

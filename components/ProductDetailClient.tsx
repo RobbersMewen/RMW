@@ -42,7 +42,7 @@ export function ProductDetailClient({ product, related }: { product: Product; re
   const isOutOfStock = product.stock != null && product.stock === 0;
 
   const waMessage = encodeURIComponent(`Hi! I'd like to order:\n*${product.name}*\nPrice: Rs ${product.price.toLocaleString()}\n\nPlease confirm availability.`);
-  const waLink = `https://wa.me/923001234567?text=${waMessage}`;
+  const waLink = `https://wa.me/923123439173?text=${waMessage}`;
 
   return (
     <section className="section cart-section">

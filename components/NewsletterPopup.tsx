@@ -9,7 +9,12 @@ export function NewsletterPopup() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setShow(true);
+    const last = localStorage.getItem("rm-newsletter-shown");
+    const today = new Date().toDateString();
+    if (last !== today) {
+      setShow(true);
+      localStorage.setItem("rm-newsletter-shown", today);
+    }
   }, []);
 
   const dismiss = () => {

@@ -118,7 +118,7 @@ export default function AccountPage() {
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span className="product-price" style={{ fontSize: "0.95rem" }}>Rs {order.total.toLocaleString()}</span>
-                    <Link href="/track-order" style={{ fontSize: "0.8rem", color: "var(--muted)", textDecoration: "underline" }}>
+                    <Link href={`/track-order?order=${order.order_number}`} style={{ fontSize: "0.8rem", color: "var(--muted)", textDecoration: "underline" }}>
                       Track
                     </Link>
                   </div>

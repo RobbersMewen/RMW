@@ -49,6 +49,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid items" }, { status: 400 });
     }
 
+    // Validate stock for each item
+    const productIds = items.map((i: any) => i.id).filter(Boolean);
+    if (productIds.length > 0) {
+      const { data: products } = await supabase
+        .from("products")
+        .select("id, name, stock")
+        .in("id", productIds);
+
+      if (products) {
+        for (const item of items) {
+          const product = products.find((p: any) => p.id === item.id);
+          if (product && product.stock !== null && product.stock !== undefined) {
+            const qty = Math.min(Math.max(Math.floor(Number(item.quantity) || 1), 1), 10);
+            if (product.stock < qty) {
+              return NextResponse.json({ error: `"${product.name}" only has ${product.stock} unit${product.stock === 1 ? "" : "s"} left in stock.` }, { status: 400 });
+            }
+          }
+        }
+      }
+    }
+
     const subtotal = items.reduce((sum: number, item: { price: number; quantity: number }) => {
       const price = Number(item.price) || 0;
       const quantity = Math.min(Math.max(Math.floor(Number(item.quantity) || 0), 1), 100);
@@ -87,6 +108,13 @@ export async function POST(req: NextRequest) {
 
     if (error) {
       return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
+    }
+
+    // Deduct stock for each item
+    for (const item of items) {
+      if (!item.id) continue;
+      const qty = Math.min(Math.max(Math.floor(Number(item.quantity) || 1), 1), 10);
+      await supabase.rpc("decrement_stock", { product_id: item.id, amount: qty });
     }
 
     return NextResponse.json({ order: data }, { status: 201 });

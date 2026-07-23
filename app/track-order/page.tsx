@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { PageShell } from "@/components/PageShell";
 
 type Order = {
@@ -29,8 +30,11 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 export default function TrackOrderPage() {
-  const [orderNumber, setOrderNumber] = useState("");
+  const searchParams = useSearchParams();
+  const [orderNumber, setOrderNumber] = useState(searchParams.get("order") || "");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [lookupBy, setLookupBy] = useState<"email" | "phone">("email");
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(false);
   const [cancelling, setCancelling] = useState(false);
@@ -39,18 +43,20 @@ export default function TrackOrderPage() {
 
   const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!orderNumber.trim() || !email.trim()) return;
+    const identifier = lookupBy === "email" ? email.trim() : phone.trim();
+    if (!orderNumber.trim() || !identifier) return;
 
     setLoading(true);
     setError("");
     setOrder(null);
 
     try {
-      const res = await fetch(`/api/orders/${orderNumber.trim()}?email=${encodeURIComponent(email.trim())}`);
+      const param = lookupBy === "email" ? `email=${encodeURIComponent(identifier)}` : `phone=${encodeURIComponent(identifier)}`;
+      const res = await fetch(`/api/orders/${orderNumber.trim()}?${param}`);
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Order not found. Please check your order number and email.");
+        setError(data.error || "Order not found. Please check your details.");
       } else {
         setOrder(data.order);
       }
@@ -76,14 +82,29 @@ export default function TrackOrderPage() {
               className="search-input"
               required
             />
-            <input
-              type="email"
-              placeholder="Email used during checkout"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="search-input"
-              required
-            />
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <button type="button" onClick={() => setLookupBy("email")} className={lookupBy === "email" ? "primary-button" : "secondary-button"} style={{ flex: 1, fontSize: "0.85rem", padding: "0.5rem" }}>Use Email</button>
+              <button type="button" onClick={() => setLookupBy("phone")} className={lookupBy === "phone" ? "primary-button" : "secondary-button"} style={{ flex: 1, fontSize: "0.85rem", padding: "0.5rem" }}>Use Phone</button>
+            </div>
+            {lookupBy === "email" ? (
+              <input
+                type="email"
+                placeholder="Email used during checkout"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="search-input"
+                required
+              />
+            ) : (
+              <input
+                type="tel"
+                placeholder="Phone number (e.g. 03001234567)"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="search-input"
+                required
+              />
+            )}
             <button type="submit" className="primary-button" disabled={loading}>
               {loading ? "Tracking..." : "Track Order"}
             </button>
@@ -168,7 +189,7 @@ export default function TrackOrderPage() {
                       const res = await fetch(`/api/orders/${order.order_number}`, {
                         method: "PATCH",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ email: email.trim(), action: "cancel" }),
+                        body: JSON.stringify({ email: lookupBy === "email" ? email.trim() : "", phone: lookupBy === "phone" ? phone.trim() : "", action: "cancel" }),
                       });
                       const data = await res.json();
                       if (res.ok) {
