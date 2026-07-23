@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { PageShell } from "@/components/PageShell";
 
@@ -30,6 +30,14 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 export default function TrackOrderPage() {
+  return (
+    <Suspense fallback={<PageShell><section className="section cart-section"><div className="container"><p>Loading...</p></div></section></PageShell>}>
+      <TrackOrderContent />
+    </Suspense>
+  );
+}
+
+function TrackOrderContent() {
   const searchParams = useSearchParams();
   const [orderNumber, setOrderNumber] = useState(searchParams.get("order") || "");
   const [email, setEmail] = useState("");
