@@ -2,12 +2,23 @@ import { PageShell } from "@/components/PageShell";
 import { getAllProducts } from "@/store/products";
 import { HeroMarquee } from "@/components/ui/HeroMarquee";
 import { AdReveal } from "@/components/AdReveal";
+import { createClient } from "@supabase/supabase-js";
 import Link from "next/link";
 
 export const revalidate = 60;
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
 export default async function Home() {
-  const allProducts = await getAllProducts();
+  const [allProducts, campaignRes] = await Promise.all([
+    getAllProducts(),
+    supabase.from("campaign").select("*").eq("is_active", true).order("sort_order", { ascending: true }),
+  ]);
+
+  const slides = (campaignRes.data || []).map((c: any) => ({ type: c.type, url: c.url, mobile_url: c.mobile_url || "", title: c.title, subtitle: c.subtitle }));
 
   return (
     <PageShell>
@@ -36,20 +47,7 @@ export default async function Home() {
       </section>
 
       <section className="ad-reveal-section">
-        <AdReveal>
-          <video
-            className="ad-video"
-            src="https://videos.pexels.com/video-files/5765206/5765206-uhd_2560_1440_25fps.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
-          <div className="ad-overlay">
-            <p className="eyebrow">Coming Soon</p>
-            <h2>The Campaign</h2>
-          </div>
-        </AdReveal>
+        <AdReveal slides={slides.length > 0 ? slides : [{ type: "video", url: "https://videos.pexels.com/video-files/5765206/5765206-uhd_2560_1440_25fps.mp4", title: "The Campaign", subtitle: "Coming Soon" }]} duration={5000} />
       </section>
     </PageShell>
   );

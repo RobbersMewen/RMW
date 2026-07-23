@@ -1582,6 +1582,7 @@ p { color: #4a4a4a; line-height: 1.7; }
   z-index: 2;
   will-change: transform, opacity;
   transform-origin: center bottom;
+  opacity: 0;
 }
 
 .ad-reveal-inner {
@@ -1592,11 +1593,48 @@ p { color: #4a4a4a; line-height: 1.7; }
   overflow: hidden;
 }
 
+.ad-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ad-slide-in {
+  animation: adFadeIn 0.8s ease forwards;
+  z-index: 1;
+}
+
+.ad-slide-out {
+  animation: adFadeOut 0.8s ease forwards;
+  z-index: 0;
+}
+
+@keyframes adFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes adFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 .ad-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
+  background: #000;
+}
+
+.ad-mobile { display: none; }
+.ad-desktop { display: block; }
+
+@media (max-width: 760px) {
+  .ad-mobile { display: block; }
+  .ad-desktop { display: none; }
 }
 
 .ad-overlay {
@@ -1607,6 +1645,8 @@ p { color: #4a4a4a; line-height: 1.7; }
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .ad-overlay .eyebrow {
@@ -1618,6 +1658,55 @@ p { color: #4a4a4a; line-height: 1.7; }
   color: #fff;
   font-size: clamp(2rem, 5vw, 4rem);
   letter-spacing: 0.05em;
+}
+
+.ad-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 3;
+}
+
+.ad-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+  padding: 0;
+}
+
+.ad-dot-active {
+  background: #fff;
+  transform: scale(1.3);
+}
+
+.ad-mute-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  background: rgba(0,0,0,0.5);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.ad-mute-btn:hover {
+  background: rgba(0,0,0,0.75);
 }
 
 /* ===== PRODUCT DETAIL PAGE ===== */
@@ -1806,4 +1895,37 @@ p { color: #4a4a4a; line-height: 1.7; }
     gap: 1.5rem;
   }
   .product-detail-gallery { position: static; }
+
+  .ad-reveal-section {
+    width: 100%;
+    margin: 0;
+    height: 75vh;
+    border-radius: 0;
+  }
+
+  .ad-reveal-inner {
+    border-radius: 0;
+  }
+
+  .ad-overlay h2 {
+    font-size: clamp(1.6rem, 8vw, 2.5rem);
+  }
+
+  .ad-dots {
+    bottom: 14px;
+    gap: 10px;
+  }
+
+  .ad-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .ad-mute-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    top: 12px;
+    right: 12px;
+  }
 }
