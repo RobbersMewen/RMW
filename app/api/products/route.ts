@@ -11,7 +11,10 @@ export async function GET(req: NextRequest) {
 
   if (category) query = query.eq("category", category);
   if (subcategory) query = query.eq("subcategory", subcategory);
-  if (search) query = query.or(`name.ilike.%${search}%,description.ilike.%${search}%`);
+  if (search) {
+    const safeSearch = search.replace(/[%_\(\)\[\]]/g, "\\$&").slice(0, 100);
+    query = query.or(`name.ilike.%${safeSearch}%,description.ilike.%${safeSearch}%`);
+  }
 
   const { data, error } = await query;
 
